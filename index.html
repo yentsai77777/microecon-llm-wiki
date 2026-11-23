@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>個體經濟學入門總覽｜LLM Wiki 教學簡報</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F4F6F9;
+      --slide-bg: #FFFFFF;
+      --primary: #1E3A5F;
+      --accent: #D96B27;
+      --accent-soft: #FDF1E8;
+      --teal: #2A7B76;
+      --teal-soft: #E9F5F4;
+      --text: #1F2937;
+      --muted: #6B7280;
+      --border: #E5E7EB;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .topbar {
+      background: var(--primary);
+      color: #FFF;
+      padding: 0.7rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+    .topbar a {
+      color: #FCD34D;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .stage {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+    }
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 960px;
+      height: 540px;
+      background: var(--slide-bg);
+      border-radius: 16px;
+      box-shadow: 0 12px 32px rgba(30, 58, 95, 0.12);
+      padding: 2.5rem 3.2rem;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      border-top: 6px solid var(--primary);
+    }
+    .slide.active { display: flex; }
+    .slide.cover {
+      background: linear-gradient(135deg, #1E3A5F 0%, #2C5282 100%);
+      color: #FFF;
+      border-top: none;
+      justify-content: center;
+      text-align: center;
+    }
+    .tag {
+      display: inline-block;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      margin-bottom: 0.8rem;
+      width: fit-content;
+    }
+    .cover .tag { background: rgba(255,255,255,0.18); color: #FCD34D; margin: 0 auto 1rem; }
+    h1 { font-size: 2.3rem; line-height: 1.35; margin-bottom: 1rem; }
+    h2 { font-size: 1.75rem; color: var(--primary); margin-bottom: 1rem; }
+    p.lead { font-size: 1.1rem; color: #E2E8F0; max-width: 680px; margin: 0 auto; }
+    .content { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 1rem; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .card {
+      background: #F9FAFB;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.1rem 1.25rem;
+    }
+    .card.highlight { background: var(--teal-soft); border-color: #B2DFDB; }
+    .card.warn { background: var(--accent-soft); border-color: #F5CBA7; }
+    .card h3 { font-size: 1.05rem; color: var(--primary); margin-bottom: 0.45rem; }
+    .card p, .card li { font-size: 0.94rem; line-height: 1.6; color: #374151; }
+    ul { padding-left: 1.2rem; }
+    li { margin-bottom: 0.4rem; }
+    .formula {
+      font-family: monospace;
+      background: #1E293B;
+      color: #F8FAFC;
+      padding: 0.45rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      display: inline-block;
+      margin-top: 0.4rem;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th, td { border: 1px solid var(--border); padding: 0.65rem 0.85rem; text-align: left; }
+    th { background: var(--primary); color: #FFF; }
+    .footer-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 0.75rem;
+    }
+    .cover .footer-meta { border-top-color: rgba(255,255,255,0.2); color: #CBD5E1; position: absolute; bottom: 1.5rem; left: 3rem; right: 3rem; }
+    .controls {
+      background: #FFF;
+      border-top: 1px solid var(--border);
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    button {
+      background: var(--primary);
+      color: #FFF;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    button:disabled { background: #CBD5E1; cursor: not-allowed; }
+    .progress { font-size: 0.92rem; font-weight: 700; color: var(--primary); min-width: 80px; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div>📘 個體經濟學入門總覽（基於 LLM Wiki 生成）</div>
+    <div>使用鍵盤 ← → 翻頁 ｜ 政大 財政三乙 蔡秉言</div>
+  </div>
+
+  <div class="stage">
+
+    <!-- Slide 1 -->
+    <section class="slide cover active">
+      <span class="tag">MICROECONOMICS 101 ・ LLM WIKI 教學簡報</span>
+      <h1>個體經濟學 5 大單元入門總覽</h1>
+      <p class="lead">從「老闆怎麼省錢」到「市場為什麼會失靈」——專為零基礎初學者設計的 12 頁白話導覽，完整串聯成本、供給、剩餘、課稅與獨佔定價。</p>
+      <div class="footer-meta">
+        <span>資料來源：政大個體經濟學 Ch.7–Ch.11 LLM Wiki</span>
+        <span>1 / 12</span>
+      </div>
+    </section>
+
+    <!-- Slide 2 -->
+    <section class="slide">
+      <div>
+        <span class="tag">學習地圖</span>
+        <h2>這 5 個單元其實是一條連貫的故事線</h2>
+      </div>
+      <div class="content">
+        <div class="grid-3">
+          <div class="card">
+            <h3>1️⃣ 廠商內部 (Ch.7–8)</h3>
+            <p>先學會怎麼用最省錢的方式生產（成本最小化），再決定什麼價格才值得開店（供給曲線）。</p>
+          </div>
+          <div class="card highlight">
+            <h3>2️⃣ 市場交易 (Ch.9–10)</h3>
+            <p>買家與賣家各自賺到多少甜頭（CS/PS）？政府進來課稅時，誰會扛最多稅？</p>
+          </div>
+          <div class="card warn">
+            <h3>3️⃣ 市場失靈 (Ch.11)</h3>
+            <p>如果市場只剩一家獨佔廠商，為什麼商品會變貴、變少，還會出現「學生票」等差別訂價？</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>來源：wiki/index.md（整合 Ch.7–Ch.11）</span>
+        <span>2 / 12</span>
+      </div>
+    </section>
+
+    <!-- Slide 3 -->
+    <section class="slide">
+      <div>
+        <span class="tag">單元一：Ch.7 成本最小化</span>
+        <h2>老闆的第一課：怎麼花最少的錢做出指定產量？</h2>
+      </div>
+      <div class="content">
+        <div class="grid-2">
+          <div class="card highlight">
+            <h3>💡 花錢最划算的黃金法則</h3>
+            <p>假設工廠要用「人力」跟「機器」做商品，最省錢的配比，就是<strong>花在人力與機器的最後一塊錢，帶來的產量一樣多</strong>。</p>
+            <div class="formula">MP₁ / w₁ = MP₂ / w₂</div>
+          </div>
+          <div class="card warn">
+            <h3>⚠️ 別被「沉沒成本」綁架</h3>
+            <ul>
+              <li><strong>變動成本 (VC)</strong>：做越多花越多（如原料）。</li>
+              <li><strong>固定成本 (F)</strong>：不管做不做都要付（如租金）。</li>
+              <li><strong>沉沒成本 (Sunk Cost)</strong>：已付且拿不回來的錢，理性決策時<strong>應直接忽略</strong>。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>來源：Ch.7 成本最小化 (p.3–8, p.17–19)</span>
+        <span>3 / 12</span>
+      </div>
+    </section>
+
+    <!-- Slide 4 -->
+    <section class="slide">
+      <div>
+        <span class="tag">單元一：Ch.7 成本曲線</span>
+        <h2>邊際成本 (MC) 與平均成本 (AC) 的微妙關係</h2>
+      </div>
+      <div class="content">
+        <div class="grid-2">
+          <div class="card">
+            <h3>📈 為什麼 MC 一定穿過 AC 最低點？</h3>
+            <p>就像考期中考：只要你<strong>這一次考的分數 (MC)</strong> 比<strong>平均分數 (AC)</strong> 低，平均就會被拉低；反之則拉高。因此 MC 曲線一定會由下往上精準穿過 AC 與 AVC 的最低點。</p>
+          </div>
+          <div class="card highlight">
+            <h3>🏢 長期成本 (LAC) 永遠比較省</h3>
+            <p>短期內廠房大小固定，產量太高或太低都很浪費；長期可以自由換最適合的廠房，所以長期平均成本曲線 (LAC) 是所有短期曲線 (SAC) 的<strong>下包絡線</strong>。</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>來源：Ch.7 成本最小化 (p.20–24, p.27–32)</span>
+        <span>4 / 12</span>
+      </div>
+    </section>
+
+    <!-- Slide 5 -->
+    <section class="slide">
+      <div>
+        <span class="tag">單元二：Ch.8 供給函數</span>
+        <h2>完全競爭市場：小廠商只能當「價格接受者」</h2>
+      </div>
+      <div class="content">
+        <div class="card">
+          <h3>🏪 什麼是完全競爭 (Pure Competition)？</h3>
+          <p>市場上有無數家小店賣一模一樣的商品（例如菜市場的青菜）。你漲價 1 塊錢，客人就全跑光；所以你無法決定價格（Price Taker），只能決定<strong>「要生產多少量」</strong>。</p>
+        </div>
+        <div class="card highlight">
+          <h3>🎯 決定產量的核心公式</h3>
+          <p>只要多做一個商品的成本 (MC) 還低於售價 (p)，多做就能多賺！一直做到兩者相等為止：</p>
+          <div class="formula">p = MC(y) 且 MC 處於上升段</div>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>來源：Ch.8 供給函數 (p.3–9)</span>
+        <span>5 / 12</span>
+      </div>
+    </section>
+
+    <!-- Slide 6 -->
+    <section class="slide">
+      <div>
+        <span class="tag">跨單元概念 1：短期 vs. 長期</span>
+        <h2>店裡正在虧錢，今天到底要不要拉開鐵門？</h2>
+      </div>
+      <div class="content">
+        <table>
+          <thead>
+            <tr>
+              <th>比較項目</th>
+              <th>短期決策 (Short Run)</th>
+              <th>長期決策 (Long Run)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>租金等固定成本</strong></td>
+              <td>已經簽約，不開門也要付</td>
+              <td>租約到期，可選擇直接收店退場</td>
+            </tr>
+            <tr>
+              <td><strong>繼續營業條件</strong></td>
+              <td><strong>p &gt; AVC</strong>（售價夠付原料與水電就開）</td>
+              <td><strong>p &gt; AC</strong>（售價必須能涵蓋全部成本）</td>
+            </tr>
+            <tr>
+              <td><strong>市場長期利潤</strong></td>
+              <td>可能賺大錢，也可能暫時虧損</td>
+              <td>自由進出競爭，最終<strong>經濟利潤 = 0</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="footer-meta">
+        <span>來源：wiki/concepts/short-vs-long-run.md（Ch.8 p.11–18 勘誤修正、Ch.10 p.25–29）</span>
+        <span>6 / 12</span>
+      </div>
+    </section>
+
+    <!-- Slide 7 -->
+    <section class="slide">
+      <div>
+        <span class="tag">單元三：Ch.9 市場剩餘</span>
+        <h2>消費者剩餘 (CS) 與生產者剩餘 (PS)</h2>
+      </div>
+      <div class="content">
+        <div class="grid-2">
+          <div class="card highlight">
+            <h3>🛍️ 消費者剩餘 (CS)</h3>
+            <p>你心裡最多願意花 100 元買一杯咖啡，但店裡只賣 60 元，你心裡「賺到的 40 元甜頭」就是 CS。</p>
+            <p style="margin-top:0.5rem;"><strong>圖形面積</strong>：需求曲線以下、價格線以上。</p>
+          </div>
+          <div class="card warn">
+            <h3>🏭 生產者剩餘 (PS)</h3>
+            <p>老闆做這杯咖啡的最低底價 (MC) 是 35 元，卻賣了 60 元，多賺到的 25 元就是 PS。</p>
+            <p style="margin-top:0.5rem;"><strong>圖形面積</strong>：價格線以下、供給曲線以上。</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>來源：Ch.9 消費者與生產者剩餘 (p.5–7, p.18–21)</span>
+        <span>7 / 12</span>
+      </div>
+    </section>
+
+    <!-- Slide 8 -->
+    <section class="slide">
+      <div>
+        <span class="tag">單元四：Ch.10 均衡與課稅</span>
+        <h2>政府課稅時，誰真的在付錢？(Tax Incidence)</h2>
+      </div>
+      <div class="content">
+        <div class="grid-2">
+          <div class="card">
+            <h3>⚖️ 法律寫誰繳稅，其實沒差</h3>
+            <p>無論政府規定「買家結帳加稅」還是「賣家出貨繳稅」，市場價格會自動調整，<strong>最終均衡與雙方負擔完全一樣</strong>。</p>
+          </div>
+          <div class="card warn">
+            <h3>🎯 彈性決定命運</h3>
+            <p><strong>誰越離不開這個商品（彈性越小），誰就扛越重！</strong>例如民生必需品需求彈性小，課稅後幾乎都由消費者吸收。</p>
+          </div>
+        </div>
+        <div class="card highlight">
+          <p><strong>課稅的代價</strong>：成交量縮水，買賣雙方消失的剩餘中，沒進政府口袋的那塊三角形面積（<strong>-B - D</strong>），稱為<strong>無謂損失 (Deadweight Loss, DWL)</strong>。</p>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>來源：Ch.10 競爭市場均衡 (p.8, p.12–19 勘誤修正)</span>
+        <span>8 / 12</span>
+      </div>
+    </section>
+
+    <!-- Slide 9 -->
+    <section class="slide">
+      <div>
+        <span class="tag">單元五：Ch.11 獨佔市場</span>
+        <h2>市場只剩一家店：獨佔廠商怎麼定價？</h2>
+      </div>
+      <div class="content">
+        <div class="grid-2">
+          <div class="card warn">
+            <h3>👑 獨佔者 (Monopoly) 的特權</h3>
+            <p>因為沒有競爭對手，獨佔廠商面對整條市場需求曲線。想多賣一單位就得降價，所以邊際收益 (MR) 永遠小於售價 (p)。</p>
+            <div class="formula">MR = MC  ⇒  p &gt; MC</div>
+          </div>
+          <div class="card">
+            <h3>📉 為什麼社會不喜歡獨佔？</h3>
+            <ul>
+              <li>相較完全競爭，獨佔會<strong>「賣更貴、產量更少」</strong>。</li>
+              <li>願意付高於成本的買家買不到，造成<strong>無謂損失 (DWL)</strong>。</li>
+              <li>例外：水電等高固定成本的<strong>自然獨佔</strong>，常由政府介入管制價格。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>來源：Ch.11 獨佔市場 (p.2–7, p.11–17)</span>
+        <span>9 / 12</span>
+      </div>
+    </section>
+
+    <!-- Slide 10 -->
+    <section class="slide">
+      <div>
+        <span class="tag">單元五：Ch.11 差別訂價與獨佔性競爭</span>
+        <h2>為什麼電影院有學生票？三種差別訂價</h2>
+      </div>
+      <div class="content">
+        <div class="grid-3">
+          <div class="card">
+            <h3>1️⃣ 一級差別訂價</h3>
+            <p>看人喊價，直接收走每個人的最高願付價格。消費者剩餘歸零，但意外達到效率（無 DWL）。</p>
+          </div>
+          <div class="card highlight">
+            <h3>2️⃣ 二級差別訂價</h3>
+            <p>依購買數量設計不同方案（如大杯/小杯、家庭號），讓消費者自我分類選擇。</p>
+          </div>
+          <div class="card warn">
+            <h3>3️⃣ 三級差別訂價</h3>
+            <p>依身分分群定價（學生票、敬老票）。對價格越不敏感（彈性小）的族群收越貴。</p>
+          </div>
+        </div>
+        <div class="card">
+          <p><strong>獨佔性競爭 (Monopolistic Competition)</strong>：像手搖飲店，家家有特色（產品差異化）。長期利潤雖為 0，但因 <strong>p &gt; MC</strong> 仍存在超額產能。</p>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>來源：Ch.11 獨佔市場 (p.20–36)</span>
+        <span>10 / 12</span>
+      </div>
+    </section>
+
+    <!-- Slide 11 -->
+    <section class="slide">
+      <div>
+        <span class="tag">跨單元概念 2：市場效率總結</span>
+        <h2>誰偷走了社會福利？無謂損失 (DWL) 比較</h2>
+      </div>
+      <div class="content">
+        <table>
+          <thead>
+            <tr>
+              <th>情境</th>
+              <th>發生原因</th>
+              <th>對社會總福利的影響</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>完全競爭均衡 (Ch.10)</strong></td>
+              <td>p = MC，自由交易</td>
+              <td>✅ <strong>柏拉圖效率</strong>，無謂損失 = 0</td>
+            </tr>
+            <tr>
+              <td><strong>政府課稅 (Ch.10)</strong></td>
+              <td>買價與賣價出現落差</td>
+              <td>❌ 交易量減少，產生 DWL (-B - D)</td>
+            </tr>
+            <tr>
+              <td><strong>獨佔定價 (Ch.11)</strong></td>
+              <td>廠商刻意減產拉高價格</td>
+              <td>❌ 產量過少，產生 DWL (-B - C)</td>
+            </tr>
+            <tr>
+              <td><strong>競租行為 (Ch.10)</strong></td>
+              <td>花資源遊說搶固定牌照</td>
+              <td>❌ 沒有任何產出，屬於純粹浪費</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="footer-meta">
+        <span>來源：wiki/concepts/dwl-and-efficiency.md（整合 Ch.9–Ch.11）</span>
+        <span>11 / 12</span>
+      </div>
+    </section>
+
+    <!-- Slide 12 -->
+    <section class="slide cover">
+      <span class="tag">SUMMARY ・ 一張卡帶走核心公式</span>
+      <h1>恭喜完成個體經濟學入門！</h1>
+      <div class="grid-2" style="text-align:left; margin-top: 1rem;">
+        <div class="card" style="background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.25);">
+          <h3 style="color:#FCD34D;">廠商與競爭 (Ch.7–10)</h3>
+          <p style="color:#F1F5F9;">• 省錢條件：MP₁/w₁ = MP₂/w₂<br>• 競爭產量：p = MC<br>• 短期開店：p &gt; AVC ｜ 長期：p &gt; AC</p>
+        </div>
+        <div class="card" style="background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.25);">
+          <h3 style="color:#FCD34D;">福利與獨佔 (Ch.9–11)</h3>
+          <p style="color:#F1F5F9;">• 課稅歸宿：彈性越小扛越重<br>• 獨佔條件：MR = MC（且 p &gt; MC）<br>• 效率關鍵：避免不必要的 DWL</p>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>政大 財政三乙 蔡秉言 ・ TAICA 生成式 AI 第十週作業</span>
+        <span>12 / 12</span>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="controls">
+    <button id="prevBtn" onclick="changeSlide(-1)">← 上一頁</button>
+    <div class="progress" id="progress">1 / 12</div>
+    <button id="nextBtn" onclick="changeSlide(1)">下一頁 →</button>
+  </div>
+
+  <script>
+    let current = 0;
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progress = document.getElementById('progress');
+
+    function updateSlide() {
+      slides.forEach((s, i) => s.classList.toggle('active', i === current));
+      progress.textContent = `${current + 1} / ${slides.length}`;
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === slides.length - 1;
+    }
+
+    function changeSlide(step) {
+      const next = current + step;
+      if (next >= 0 && next < slides.length) {
+        current = next;
+        updateSlide();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') changeSlide(1);
+      if (e.key === 'ArrowLeft') changeSlide(-1);
+    });
+
+    updateSlide();
+  </script>
+</body>
+</html>
